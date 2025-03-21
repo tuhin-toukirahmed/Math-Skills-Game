@@ -20,7 +20,7 @@ function startGame() {
 
   score = 0;
   streakCount = 0; // Reset streak at game start
-  timeLeft = 20; // Changed back to 3 minutes (180 seconds)
+  timeLeft = 180; // Changed back to 3 minutes (180 seconds)
   document.getElementById("score").innerText = score;
   startTimer();
   generateQuestion();
@@ -143,14 +143,39 @@ function endGame() {
   document.getElementById("gamePage").classList.add("hidden");
   document.getElementById("resultPage").classList.remove("hidden");
   document.getElementById("finalScore").innerText = score;
+
+  // Capitalize first letter of player name
+  const capitalizedName =
+    playerName.charAt(0).toUpperCase() + playerName.slice(1);
+
   document.getElementById(
     "finalMessage"
-  ).innerText = `Congratulations, ${playerName}!`;
+  ).innerText = `Congratulations, ${capitalizedName}!`;
 }
 
 function goBack() {
   clearInterval(timer);
+
+  // Show the result page with the current score
   document.getElementById("gamePage").classList.add("hidden");
+  document.getElementById("resultPage").classList.remove("hidden");
+
+  // Update score and add a message about game being stopped early
+  document.getElementById("finalScore").innerText = score;
+
+  // Capitalize first letter of player name
+  const capitalizedName =
+    playerName.charAt(0).toUpperCase() + playerName.slice(1);
+
+  // Custom message showing the game was stopped early
+  document.getElementById("finalMessage").innerHTML = `Game stopped early.`;
+
+  // No need to clear inputs yet since we're showing results first
+}
+
+// Then modify restartGame to handle clearing inputs
+function restartGame() {
+  document.getElementById("resultPage").classList.add("hidden");
   document.getElementById("landingPage").classList.remove("hidden");
   clearInputs();
 }
@@ -159,10 +184,4 @@ function clearInputs() {
   document.getElementById("playerName").value = "";
   document.getElementById("answer").value = "";
   document.getElementById("difficulty").value = "easy";
-}
-
-function restartGame() {
-  document.getElementById("resultPage").classList.add("hidden");
-  document.getElementById("landingPage").classList.remove("hidden");
-  clearInputs();
 }
